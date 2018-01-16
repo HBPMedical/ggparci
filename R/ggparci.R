@@ -67,7 +67,7 @@ ggparci <- function(data, columns = 1:ncol(data), groups_column,
     # dplyr::mutate_if(is.numeric,ggparci:::normalize.default) %>%
     tibble::rowid_to_column("obs_id") %>%
     tidyr::gather(
-      key = "Variables", value = "value", -!!groups_column, -obs_id)
+      key = "Variables", value = "value", -!!groups_column, -obs_id, factor_key = TRUE)
 
   # prepare the dataset to plot a line for each observation
   if (include_obs_lines)
@@ -117,8 +117,8 @@ ggparci <- function(data, columns = 1:ncol(data), groups_column,
     scale_x_discrete(expand = c(0.05,0))
 
   if (min(data_to_plot$value) >= 0 & max(data_to_plot$value) <= 1 &
-      (max(data_to_plot$value) - min(data_to_plot$value)) > .5 )
-    p <- p + scale_y_continuous(breaks = c((0:10)/10))
+      (max(data_to_plot$value) - min(data_to_plot$value)) > .1 )
+    p <- p + scale_y_continuous(breaks = c((0:10)/10), limits = c(0,1))
 
 
   # p <- p + theme_bw()
