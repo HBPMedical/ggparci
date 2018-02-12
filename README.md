@@ -6,23 +6,15 @@ Parallel Coordinates Plot with Groups medians and their Confidence Intervals
 
 The main function `ggparci` plots parallel coordinates (gg)plot, in which each line connects the variables medians for each group.  
 Confidence "bands" for the medians are added to each line. This allows the assessment of groups (clusters) separations.  
-The variables are normalized to [0,1] scale prior to plotting.  
+The variables can be normalized to [0,1] scale prior to plotting (see examples).  
+The plot aims to facilitates the comparison of several groups across several variables, with variability assessment via the confidence intervals.  
 
-The goal is to allow the comparison of several groups across several variables, with variability assessment via the confidence intervals.  
+__Note__ : This fork is an adaptation of [talgalili/ggparci](https://github.com/talgalili/ggparci) for the Medical Information Platform (MIP). The apparent changes are in the input arguments formats, package dependencies and plotting style.
 
 ## Installation
 
-To install the latest ("cutting-edge") GitHub version run:
+To install the latest version run:
 ```r
-# You'll need devtools
-install.packages.2 <- function (pkg) if (!require(pkg)) install.packages(pkg);
-install.packages.2('devtools')
-# make sure you have Rtools installed first! if not, then run:
-#install.packages('installr'); install.Rtools()
-
-devtools::install_github("ropensci/plotly") # you will probably benefit from the latest version of plotly
-
-
 devtools::install_github('HBPMedical/ggparci')
 ```
 ## Example
