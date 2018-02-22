@@ -1,7 +1,7 @@
 Package: ggparci
 Type: Package
 Title: Parallel Coordinates Plot with Groups medians and their Confidence Intervals
-Version: 0.1.0
+Version: 0.2.0
 Date: 2017-11-09
 Authors@R: c(person("Tal", "Galili", role = c("aut", "cre", "cph"), email =
     "tal.galili@gmail.com", comment = "https://www.r-statistics.com"),
