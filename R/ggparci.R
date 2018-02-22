@@ -8,6 +8,7 @@
 #' @param columns variables to include in the plot, as character vector with columns names or as integer vector with positions. the group variable is ignored, if specified.
 #' @param groups_column grouping variable name (quoted)
 #' @param conf_level confidence level for the bands, Default: 0.95
+#' @param method which normalization method to apply. See \code{\link{normalize}} (default) and \code{\link{percentize}}.
 #' @param title Plot title, Default: ''
 #' @param groups_in_facets logical. plot each group in a separate plot/facet? Default: FALSE
 #' @param flip_coords logical. make the coordinates horizontal? Default: FALSE
@@ -21,20 +22,20 @@
 #'
 #' \dontrun{
 #'
-#' ggparci(iris, groups_column = "Species")
-#' ggparci(normalize(iris), groups_column = "Species")
-#' ggparci(percentize(iris), groups_column = "Species")
+#' ggparci(iris, groups_column = "Species", method = "none")
+#' ggparci(iris, groups_column = "Species", method = "normalize")
+#' ggparci(iris, groups_column = "Species", method = "percentize")
 #'
 #' #select only some of the variables
 #' # plot a line for each observation
 #' # and dont plot the CIs
-#' ggparci(percentize(iris),columns = 1:3, groups_column = "Species", include_obs_lines = T, alpha_ci_bands = 0)
+#' ggparci(iris,columns = 1:3, groups_column = "Species", include_obs_lines = T, alpha_ci_bands = 0)
 #'
 #' # display each group in a different facet
-#' ggparci(data = normalize(iris), groups_column = "Species", groups_in_facets = T)
+#' ggparci(iris, groups_column = "Species", groups_in_facets = T)
 #'
 #' # flip the plot
-#' ggparci(data = normalize(iris), groups_column = "Species", flip_coords = T)
+#' ggparci(iris, groups_column = "Species", flip_coords = T)
 #'
 #' }
 #' @rdname ggparci
@@ -42,6 +43,7 @@
 
 ggparci <- function(data, columns = 1:ncol(data), groups_column,
  conf_level = 0.95,
+ method = c("normalize","percentize","none"),
  title = "",
  groups_in_facets = FALSE,
  flip_coords = FALSE,
@@ -49,6 +51,12 @@ ggparci <- function(data, columns = 1:ncol(data), groups_column,
  alpha_obs_lines = 0.1,
  alpha_ci_bands = 0.5,...)
   {
+
+  method <- match.arg(method)
+  data <- switch(method,
+                 normalize = normalize(data),
+                 percentize = percentize(data),
+                 none = data)
 
   # determine which columns are numeric
   numeric_columns <- columns[sapply(data[columns], is.numeric)]
@@ -64,7 +72,6 @@ ggparci <- function(data, columns = 1:ncol(data), groups_column,
     data %>%
     tibble::as_data_frame() %>%
     dplyr::select(groups_column, numeric_columns) %>%
-    # dplyr::mutate_if(is.numeric,ggparci:::normalize.default) %>%
     tibble::rowid_to_column("obs_id") %>%
     tidyr::gather(
       key = "Variables", value = "value", -!!groups_column, -obs_id, factor_key = TRUE)

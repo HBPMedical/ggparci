@@ -5,7 +5,8 @@
 \title{Parallel Coordinates Plot with Groups medians and their Confidence Intervals}
 \usage{
 ggparci(data, columns = 1:ncol(data), groups_column, conf_level = 0.95,
-  title = "", groups_in_facets = FALSE, flip_coords = FALSE,
+  method = c("normalize", "percentize", "none"), title = "",
+  groups_in_facets = FALSE, flip_coords = FALSE,
   include_obs_lines = FALSE, alpha_obs_lines = 0.1, alpha_ci_bands = 0.5,
   ...)
 }
@@ -17,6 +18,8 @@ ggparci(data, columns = 1:ncol(data), groups_column, conf_level = 0.95,
 \item{groups_column}{grouping variable name (quoted)}
 
 \item{conf_level}{confidence level for the bands, Default: 0.95}
+
+\item{method}{which normalization method to apply. See \code{\link{normalize}} (default) and \code{\link{percentize}}.}
 
 \item{title}{Plot title, Default: ''}
 
@@ -44,20 +47,20 @@ The function plots parallel coordinates (gg)plot, in which each line connects th
 
 \dontrun{
 
-ggparci(iris, groups_column = "Species")
-ggparci(normalize(iris), groups_column = "Species")
-ggparci(percentize(iris), groups_column = "Species")
+ggparci(iris, groups_column = "Species", method = "none")
+ggparci(iris, groups_column = "Species", method = "normalize")
+ggparci(iris, groups_column = "Species", method = "percentize")
 
 #select only some of the variables
 # plot a line for each observation
 # and dont plot the CIs
-ggparci(percentize(iris),columns = 1:3, groups_column = "Species", include_obs_lines = T, alpha_ci_bands = 0)
+ggparci(iris,columns = 1:3, groups_column = "Species", include_obs_lines = T, alpha_ci_bands = 0)
 
 # display each group in a different facet
-ggparci(data = normalize(iris), groups_column = "Species", groups_in_facets = T)
+ggparci(iris, groups_column = "Species", groups_in_facets = T)
 
 # flip the plot
-ggparci(data = normalize(iris), groups_column = "Species", flip_coords = T)
+ggparci(iris, groups_column = "Species", flip_coords = T)
 
 }
 }
